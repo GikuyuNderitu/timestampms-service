@@ -41,7 +41,16 @@ const monthToName = monthNumber => {
 const dateToLanguage = d => `${monthToName(d.getMonth())} ${d.getDate()}, ${d.getFullYear()}`
 
 app.use(async (ctx, next) => {
-  const parsedUrl = decodeURI(url.parse(ctx.request.url).path.substring(1));
+  let parsedUrl;
+  try{
+    parsedUrl = decodeURI(url.parse(ctx.request.url).path.substring(1));
+  } catch (e) {
+    ctx.response.body = JSON.stringify({
+      uxix: null,
+      natural: null
+    }, null, 4)
+    return;
+  }
   if(parsedUrl === 'favicon.ico') return
 
   let date;
